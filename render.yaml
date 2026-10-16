@@ -18,6 +18,10 @@ services:
     runtime: docker
     plan: free
     autoDeploy: true
+    # Render shu manzilni tekshirib, server tirik ekanini biladi. Server'da
+    # /api/health allaqachon mavjud (200 qaytaradi). Busiz Render ba'zan
+    # serverni noto'g'ri "ishlamayapti" deb to'xtatishi mumkin.
+    healthCheckPath: /api/health
     envVars:
       - key: AI_PROVIDER
         value: groq

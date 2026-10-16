@@ -30,4 +30,8 @@ ENV HOST=0.0.0.0
 # EXPOSE faqat hujjat uchun; server haqiqiy portni process.env.PORT dan oladi.
 EXPOSE 10000
 
-CMD ["npm", "start"]
+# MUHIM: "npm start" EMAS, to'g'ridan-to'g'ri "node" ishlatamiz.
+# Sabab: "npm start" SIGTERM signalini node jarayoniga to'g'ri uzatmaydi,
+# natijada logda "npm error signal SIGTERM" chiqadi va host buni "crash" deb
+# hisoblashi mumkin. To'g'ridan-to'g'ri node ishlatish bu muammoni yo'qotadi.
+CMD ["node", "server/server.js"]
