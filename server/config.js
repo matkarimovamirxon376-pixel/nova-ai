@@ -57,9 +57,13 @@ function resolveOpenAiLike() {
       apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY || '',
       baseUrl: process.env.GROQ_BASE_URL || process.env.OPENAI_BASE_URL || 'https://api.groq.com/openai/v1',
       model,
-      // Groq multimodal model (e.g. a Llama vision model). Falls back to the
-      // text model, but vision only works if the model supports images.
-      visionModel: process.env.GROQ_VISION_MODEL || process.env.OPENAI_VISION_MODEL || model,
+      // Groq multimodal (vision) modeli — rasmlarni ko'ra oladi.
+      // "openai/gpt-oss-20b" FAQAT matn, rasmni qo'llamaydi, shuning uchun
+      // vision uchun ALOHIDA model kerak: Llama 4 Scout (bepul tier, multimodal).
+      visionModel:
+        process.env.GROQ_VISION_MODEL ||
+        process.env.OPENAI_VISION_MODEL ||
+        'meta-llama/llama-4-scout-17b-16e-instruct',
     };
   }
   return {
