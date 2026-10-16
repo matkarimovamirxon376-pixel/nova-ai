@@ -48,7 +48,11 @@ const RAW_PROVIDER = (process.env.AI_PROVIDER || 'none').toLowerCase();
 function resolveOpenAiLike() {
   const isGroq = RAW_PROVIDER === 'groq';
   if (isGroq) {
-    const model = process.env.GROQ_MODEL || process.env.OPENAI_MODEL || 'llama-3.3-70b-versatile';
+    // Default model: Groq'ning hozirgi bepul tier modeli.
+    // Eslatma: eski "llama-3.3-70b-versatile" va "llama-3.1-8b-instant" Groq
+    // tomonidan 2026-avgustda bepul/developer tier'dan o'chirildi. Groq rasman
+    // "openai/gpt-oss-20b" ni almashtiruvchi sifatida tavsiya qiladi.
+    const model = process.env.GROQ_MODEL || process.env.OPENAI_MODEL || 'openai/gpt-oss-20b';
     return {
       apiKey: process.env.GROQ_API_KEY || process.env.OPENAI_API_KEY || '',
       baseUrl: process.env.GROQ_BASE_URL || process.env.OPENAI_BASE_URL || 'https://api.groq.com/openai/v1',

@@ -93,7 +93,7 @@ credit card** (verify current limits in your Groq console).
 ```env
 AI_PROVIDER=groq
 GROQ_API_KEY=gsk_your_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_MODEL=openai/gpt-oss-20b
 ```
 Internally this uses the OpenAI-compatible adapter with Groq's endpoint — no
 extra setup needed.
