@@ -1,0 +1,28 @@
+{
+  "name": "NOVA AI — Sun'iy intellekt yordamchisi",
+  "short_name": "NOVA AI",
+  "description": "Ozbekcha sun'iy intellekt yordamchisi: suhbat, tarjima, insho, matematika va boshqalar.",
+  "lang": "uz",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "categories": ["productivity", "education", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1726"/>
+      <stop offset="1" stop-color="#0a0a0f"/>
+    </linearGradient>
+    <linearGradient id="starm" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#e879f9"/>
+    </linearGradient>
+    <filter id="glowm" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- Full-bleed background so Android can crop to any shape -->
+  <rect width="512" height="512" fill="url(#bgm)"/>
+  <!-- Star kept well within the 80% safe zone (centered, smaller) -->
+  <g filter="url(#glowm)">
+    <path fill="url(#starm)" d="M256 160
+      c11 56 33 78 89 89
+      c-56 11 -78 33 -89 89
+      c-11 -56 -33 -78 -89 -89
+      c56 -11 78 -33 89 -89 z"/>
+  </g>
+</svg>
