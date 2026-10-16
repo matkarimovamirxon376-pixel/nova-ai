@@ -19,8 +19,15 @@ COPY . .
 
 # API kaliti IMAGE ichiga YOZILMAYDI. U ishga tushganda muhit o'zgaruvchisi
 # sifatida beriladi (Render/Railway panelidan yoki `docker run -e`).
+#
+# MUHIM: PORT ni bu yerda QATTIQ belgilamaymiz. Render (va boshqa hostlar)
+# serverga o'z PORT raqamini muhit o'zgaruvchisi orqali beradi; server uni
+# avtomatik o'qiydi (config.js: process.env.PORT). Agar bu yerda ENV PORT=3000
+# qilsak, host bergan portni bosib ketadi va server noto'g'ri portda ishga
+# tushib, host ulana olmaydi (SIGTERM bilan to'xtaydi).
 ENV HOST=0.0.0.0
-ENV PORT=3000
-EXPOSE 3000
+# Render PORT ni muhit o'zgaruvchisi orqali beradi (render.yaml da 10000).
+# EXPOSE faqat hujjat uchun; server haqiqiy portni process.env.PORT dan oladi.
+EXPOSE 10000
 
 CMD ["npm", "start"]

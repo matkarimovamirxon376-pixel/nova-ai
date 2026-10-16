@@ -13,12 +13,10 @@
 services:
   - type: web
     name: nova-ai
-    runtime: node
+    # Docker ishlatamiz (Dockerfile mavjud). Zero-dependency bo'lgani uchun
+    # image juda yengil.
+    runtime: docker
     plan: free
-    # Loyihada o'rnatiladigan paketlar yo'q (zero-dependency), shuning uchun
-    # build bosqichi hech narsa qilmaydi, lekin Render talab qiladi.
-    buildCommand: npm install
-    startCommand: npm start
     autoDeploy: true
     envVars:
       - key: AI_PROVIDER
@@ -27,7 +25,9 @@ services:
         value: llama-3.3-70b-versatile
       - key: GROQ_BASE_URL
         value: https://api.groq.com/openai/v1
+      # Render serverga shu PORT raqamini beradi; server uni o'qiydi.
+      - key: PORT
+        value: "10000"
       # API kaliti: Render panelida qo'lda kiritiladi. Kodga YOZILMAYDI.
       - key: GROQ_API_KEY
         sync: false
-      # HOST/PORT ni Render o'zi beradi; server ularni avtomatik o'qiydi.
