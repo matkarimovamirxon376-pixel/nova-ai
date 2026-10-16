@@ -81,6 +81,41 @@ function handleHealth(req, res) {
   });
 }
 
+// Diagnostika: AI provayderga haqiqiy test so'rov yuboradi va ANIQ natijani
+// qaytaradi (kalit noto'g'rimi, model noto'g'rimi, tarmoqmi). Kalitning o'zi
+// HECH QACHON qaytarilmaydi — faqat uning bor/yo'qligi va uzunligi.
+// Brauzerda ochib ko'rish uchun:  <sayt>/api/diagnose
+async function handleDiagnose(req, res) {
+  const keyLen = (config.openai.apiKey || config.gemini.apiKey || '').length;
+  const base = {
+    provider: config.aiProvider,
+    effectiveProvider: config.effectiveProvider,
+    aiConnected: isAiConnected(),
+    apiKeyPresent: keyLen > 0,
+    apiKeyLength: keyLen, // faqat uzunlik, kalitning o'zi emas
+    model: config.openai.model,
+    baseUrl: config.openai.baseUrl,
+  };
+  if (!isAiConnected()) {
+    return sendJson(res, 200, {
+      ...base,
+      result: 'NOT_CONFIGURED',
+      message: 'AI_PROVIDER yoki API kalit sozlanmagan.',
+    });
+  }
+  try {
+    const text = await generate({ task: 'chat', prompt: "Faqat 'OK' deb javob ber." });
+    sendJson(res, 200, { ...base, result: 'SUCCESS', sample: (text || '').slice(0, 80) });
+  } catch (e) {
+    sendJson(res, 200, {
+      ...base,
+      result: 'ERROR',
+      errorCode: e.code || 'UNKNOWN',
+      message: e.message || String(e),
+    });
+  }
+}
+
 // Extract text from an uploaded PDF (sent as base64). Dependency-free; runs
 // locally with no third-party service, so it works even without an AI key.
 async function handlePdf(req, res) {
@@ -251,6 +286,7 @@ const server = createServer(async (req, res) => {
   try {
     if (url.startsWith('/api/')) {
       if (url === '/api/health' && method === 'GET') return handleHealth(req, res);
+      if (url === '/api/diagnose' && method === 'GET') return handleDiagnose(req, res);
       if (url === '/api/generate' && method === 'POST') return handleGenerate(req, res);
       if (url === '/api/pdf' && method === 'POST') return handlePdf(req, res);
       if (url === '/api/vision' && method === 'POST') return handleVision(req, res);
