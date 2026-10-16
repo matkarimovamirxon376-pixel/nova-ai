@@ -94,6 +94,7 @@ async function handleDiagnose(req, res) {
     apiKeyPresent: keyLen > 0,
     apiKeyLength: keyLen, // faqat uzunlik, kalitning o'zi emas
     model: config.openai.model,
+    visionModel: config.openai.visionModel,
     baseUrl: config.openai.baseUrl,
   };
   if (!isAiConnected()) {
