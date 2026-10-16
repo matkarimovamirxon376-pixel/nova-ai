@@ -117,6 +117,30 @@ async function handleDiagnose(req, res) {
   }
 }
 
+// Sizning API kalitingiz kira oladigan modellar ro'yxatini qaytaradi.
+// Shunday qilib qaysi vision model nomi haqiqatan mavjudligini aniq bilamiz.
+// Kalit QAYTARILMAYDI — faqat model nomlari.
+async function handleModels(req, res) {
+  if (config.effectiveProvider !== 'openai' || !config.openai.apiKey) {
+    return sendJson(res, 200, { ok: false, message: 'OpenAI-mos provayder (groq) sozlanmagan.' });
+  }
+  try {
+    const r = await fetch(`${config.openai.baseUrl}/models`, {
+      headers: { Authorization: `Bearer ${config.openai.apiKey}` },
+    });
+    if (!r.ok) {
+      return sendJson(res, 200, { ok: false, status: r.status, message: 'Model ro\'yxatini olib bolmadi.' });
+    }
+    const data = await r.json();
+    const ids = (data.data || []).map((m) => m.id).sort();
+    // Vision (rasm) uchun ehtimoliy modellarни ajratib ko'rsatamiz.
+    const visionLike = ids.filter((id) => /vision|scout|maverick|llava|llama-4/i.test(id));
+    sendJson(res, 200, { ok: true, total: ids.length, visionLike, all: ids });
+  } catch (e) {
+    sendJson(res, 200, { ok: false, message: e.message || 'xato' });
+  }
+}
+
 // Extract text from an uploaded PDF (sent as base64). Dependency-free; runs
 // locally with no third-party service, so it works even without an AI key.
 async function handlePdf(req, res) {
@@ -288,6 +312,7 @@ const server = createServer(async (req, res) => {
     if (url.startsWith('/api/')) {
       if (url === '/api/health' && method === 'GET') return handleHealth(req, res);
       if (url === '/api/diagnose' && method === 'GET') return handleDiagnose(req, res);
+      if (url === '/api/models' && method === 'GET') return handleModels(req, res);
       if (url === '/api/generate' && method === 'POST') return handleGenerate(req, res);
       if (url === '/api/pdf' && method === 'POST') return handlePdf(req, res);
       if (url === '/api/vision' && method === 'POST') return handleVision(req, res);
