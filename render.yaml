@@ -1,0 +1,33 @@
+# Render.com uchun NOVA AI konfiguratsiyasi.
+# Bu fayl loyihani internetga chiqarishni avtomatlashtiradi.
+#
+# Qanday ishlatiladi:
+#  1. Loyihani GitHub repozitoriyasiga joylang (yoki Render'ning "Deploy" tugmasi orqali).
+#  2. Render'da "New +" -> "Blueprint" -> ushbu repo'ni tanlang. Render bu
+#     render.yaml faylini avtomatik o'qiydi.
+#  3. Render sizdan GROQ_API_KEY qiymatini so'raydi (chunki u "sync: false").
+#     Kalitni O'SHA YERGA kiriting — u kodda yoki GitHub'da saqlanmaydi.
+#
+# Hech qanday pullik xizmat shart emas: "plan: free" bepul rejadan foydalanadi.
+
+services:
+  - type: web
+    name: nova-ai
+    runtime: node
+    plan: free
+    # Loyihada o'rnatiladigan paketlar yo'q (zero-dependency), shuning uchun
+    # build bosqichi hech narsa qilmaydi, lekin Render talab qiladi.
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_BASE_URL
+        value: https://api.groq.com/openai/v1
+      # API kaliti: Render panelida qo'lda kiritiladi. Kodga YOZILMAYDI.
+      - key: GROQ_API_KEY
+        sync: false
+      # HOST/PORT ni Render o'zi beradi; server ularni avtomatik o'qiydi.

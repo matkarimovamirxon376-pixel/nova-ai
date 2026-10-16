@@ -1,0 +1,13 @@
+# Secrets — never commit the real environment file
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+.DS_Store
+
+# Logs
+*.log
+
+# Kiro muhiti ichki sozlamalari
+.kiro/

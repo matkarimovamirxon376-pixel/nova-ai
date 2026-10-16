@@ -1,0 +1,8 @@
+# Docker image ichiga KIRMAYDIGAN fayllar.
+# Eng muhimi: .env (API kaliti) hech qachon image ichiga tushmasligi kerak.
+.env
+.git
+node_modules
+npm-debug.log*
+*.log
+.DS_Store

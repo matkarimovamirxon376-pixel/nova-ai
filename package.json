@@ -1,0 +1,21 @@
+{
+  "name": "nova-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "NOVA AI — premium Uzbek-language AI assistant (zero runtime dependencies)",
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "lint": "eslint public/js server scripts eslint.config.mjs",
+    "check:ai": "node scripts/check-ai.mjs",
+    "test": "node scripts/smoke-test.mjs",
+    "test:integration": "node scripts/integration-test.mjs",
+    "test:tasks": "node scripts/verify-tasks.mjs",
+    "test:providers": "node scripts/verify-providers.mjs",
+    "test:all": "node scripts/smoke-test.mjs && node scripts/integration-test.mjs && node scripts/verify-tasks.mjs && node scripts/verify-providers.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

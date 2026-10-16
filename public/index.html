@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="description" content="NOVA AI — ozbekcha sun'iy intellekt yordamchisi" />
+  <title>NOVA AI</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Sidebar / navigation -->
+  <aside class="sidebar" id="sidebar" aria-label="Asosiy navigatsiya">
+    <div class="sidebar__brand">
+      <span class="brand__logo" aria-hidden="true">✦</span>
+      <span class="brand__name">NOVA<span class="brand__ai">AI</span></span>
+    </div>
+
+    <button class="btn btn--primary new-chat" id="newChatBtn">
+      <span aria-hidden="true">＋</span> <span data-i18n="newChat">Yangi suhbat</span>
+    </button>
+
+    <nav class="tools" aria-label="Vositalar">
+      <p class="tools__label" data-i18n="tools">Vositalar</p>
+      <button class="tool" data-task="chat" aria-pressed="true">
+        <span class="tool__icon" aria-hidden="true">💬</span><span data-i18n="t_chat">Suhbat</span>
+      </button>
+      <button class="tool" data-task="translate">
+        <span class="tool__icon" aria-hidden="true">🌐</span><span data-i18n="t_translate">Tarjima</span>
+      </button>
+      <button class="tool" data-task="essay">
+        <span class="tool__icon" aria-hidden="true">📝</span><span data-i18n="t_essay">Insho / Hisobot</span>
+      </button>
+      <button class="tool" data-task="english">
+        <span class="tool__icon" aria-hidden="true">🎓</span><span data-i18n="t_english">Ingliz tili</span>
+      </button>
+      <button class="tool" data-task="math">
+        <span class="tool__icon" aria-hidden="true">∑</span><span data-i18n="t_math">Matematika</span>
+      </button>
+      <button class="tool" data-task="document">
+        <span class="tool__icon" aria-hidden="true">📄</span><span data-i18n="t_document">Hujjat tahlili</span>
+      </button>
+      <button class="tool" data-task="image">
+        <span class="tool__icon" aria-hidden="true">🖼️</span><span data-i18n="t_image">Rasm tahlili</span>
+      </button>
+    </nav>
+
+    <div class="history" aria-label="Suhbatlar tarixi">
+      <p class="tools__label" data-i18n="history">Tarix</p>
+      <ul class="history__list" id="historyList"></ul>
+    </div>
+
+    <div class="sidebar__footer">
+      <button class="tool" id="settingsBtn">
+        <span class="tool__icon" aria-hidden="true">⚙️</span><span data-i18n="settings">Sozlamalar</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
+  <!-- Main area -->
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menyu">☰</button>
+      <div class="topbar__title">
+        <span id="activeToolTitle" data-i18n="t_chat">Suhbat</span>
+      </div>
+      <div class="topbar__status" id="aiStatus" title="">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText" data-i18n="status_checking">Tekshirilmoqda…</span>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="Mavzuni almashtirish">🌙</button>
+    </header>
+
+    <section class="chat" id="chat" aria-live="polite">
+      <div class="welcome" id="welcome">
+        <div class="welcome__logo" aria-hidden="true">✦</div>
+        <h1 class="welcome__title">NOVA <span>AI</span></h1>
+        <p class="welcome__subtitle" data-i18n="welcome_sub">
+          Ozbek tilidagi aqlli yordamchingiz
+        </p>
+        <div class="suggestions" id="suggestions"></div>
+      </div>
+    </section>
+
+    <!-- Composer -->
+    <footer class="composer">
+      <div class="composer__attachments" id="attachments" hidden></div>
+      <div class="composer__row">
+        <button class="icon-btn" id="attachBtn" aria-label="Fayl biriktirish" title="Fayl biriktirish">📎</button>
+        <input type="file" id="fileInput" hidden
+               accept=".txt,.md,.csv,.json,.pdf,image/*" />
+        <textarea id="input" rows="1" data-i18n-ph="composer_ph"
+                  placeholder="Xabar yozing…" aria-label="Xabar"></textarea>
+        <button class="icon-btn" id="micBtn" aria-label="Ovozli kiritish" title="Ovozli kiritish">🎙️</button>
+        <button class="icon-btn send-btn" id="sendBtn" aria-label="Yuborish" title="Yuborish">➤</button>
+      </div>
+      <p class="composer__hint" data-i18n="composer_hint">
+        NOVA AI xatolarga yol qoyishi mumkin. Muhim ma'lumotlarni tekshiring.
+      </p>
+    </footer>
+  </main>
+
+  <!-- Settings dialog -->
+  <dialog class="dialog" id="settingsDialog">
+    <form method="dialog" class="dialog__inner">
+      <header class="dialog__head">
+        <h2 data-i18n="settings">Sozlamalar</h2>
+        <button class="icon-btn" value="close" aria-label="Yopish">✕</button>
+      </header>
+
+      <div class="field">
+        <label data-i18n="setting_theme">Mavzu</label>
+        <div class="segmented" id="themeSegment">
+          <button type="button" data-theme-val="dark" data-i18n="theme_dark">Tungi</button>
+          <button type="button" data-theme-val="light" data-i18n="theme_light">Kunduzgi</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="ttsToggle" data-i18n="setting_tts">Matnni ovozga aylantirish (TTS)</label>
+        <label class="switch">
+          <input type="checkbox" id="ttsToggle" />
+          <span class="switch__track"></span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="voiceSelect" data-i18n="setting_voice">Ovoz (TTS)</label>
+        <select id="voiceSelect"></select>
+      </div>
+
+      <div class="field field--col">
+        <div class="field" style="width:100%">
+          <label for="ocrToggle" data-i18n="setting_ocr">Skaner qilingan PDF uchun OCR</label>
+          <label class="switch">
+            <input type="checkbox" id="ocrToggle" />
+            <span class="switch__track"></span>
+          </label>
+        </div>
+        <p class="muted" data-i18n="setting_ocr_hint" id="ocrHint"></p>
+      </div>
+
+      <div class="field field--col">
+        <label data-i18n="setting_about">Dastur haqida</label>
+        <p class="muted" id="aboutText"></p>
+      </div>
+
+      <footer class="dialog__foot">
+        <button class="btn btn--ghost" id="clearDataBtn" type="button" data-i18n="clear_data">
+          Barcha tarixni ochirish
+        </button>
+        <button class="btn btn--primary" value="close" data-i18n="close">Yopish</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
